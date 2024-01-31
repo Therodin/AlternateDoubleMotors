@@ -86,24 +86,24 @@ void loop()
        
       {
     	
-       digitalWrite(PinMotor1, HIGH);
-    	digitalWrite(PinMotor2, LOW);
+       digitalWrite(pinMotor1, HIGH);
+    	digitalWrite(pinMotor2, LOW);
     
     	}
  
-  	if (((Button1State == LOW) && (Button2State == HIGH)))
+  	if (((Motor1State == LOW) && (Motor2State == HIGH)));
         {
     	
-       digitalWrite(PinMotor2, HIGH);
-    	digitalWrite(PinMotor1, LOW);
+       digitalWrite(pinMotor2, HIGH);
+    	digitalWrite(pinMotor1, LOW);
     
     	}
     
-    if (((Button1State == HIGH) && (Button2State == HIGH)))
+    if (((Motor1State == HIGH) && (Motor2State == HIGH)));
         {
     	
-       digitalWrite(led2Pin, LOW);
-    	digitalWrite(led1Pin, LOW);
+       digitalWrite(pinMotor2, LOW);
+    	digitalWrite(pinMotor1, LOW);
   	
     
   
