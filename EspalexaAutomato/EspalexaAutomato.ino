@@ -1,26 +1,14 @@
-/*
- * Esse código é uma adaptação para motores que ligam alternadamente.
- * É um código originalmente criada por Christian Schwinne
- */ 
-
 #ifdef ARDUINO_ARCH_ESP32
 #include <WiFi.h>
 #else
+#include <ESP8266WiFi.h>
 #endif
 #include <Espalexa.h>
-#include <ESP8266WiFi.h>
 
-
-//definições de pinos
-#define pinMotor1 1
-#define pinMotor2 2
+#define pinMotor1 2
+#define pinMotor2 4
 #define pinMotor3 5
-#define pinMotor4 6
-
-//controle reostato
-uint8_t ligMotor;
-uint8_t ligMotorAlvo;
-#define timeChange 15
+#define pinMotor4 18
 
 // prototypes
 boolean connectWifi();
@@ -32,8 +20,8 @@ void thirdLightChanged(uint8_t brightness);
 void fourthLightChanged(uint8_t brightness);
 
 // Change this!!
-const char* ssid = "...";
-const char* password = "wifipassword";
+const char* ssid = "ATEL_FIBRA_MONTREAL35@SUA";
+const char* password = "35neto@45";
 
 boolean wifiConnected = false;
 
@@ -43,11 +31,12 @@ EspalexaDevice* device3; //this is optional
 
 void setup()
 {
-  pinMode(pinMotor1, OUTPUT)
-  pinMode(pinMotor2, OUTPUT)
-  pinMode(pinMotor3, OUTPUT)
-  pinMode(pinMotor4, OUTPUT)
-
+  
+  pinMode(pinMotor1, OUTPUT);
+  pinMode(pinMotor2, OUTPUT);
+  pinMode(pinMotor3, OUTPUT);
+  pinMode(pinMotor4, OUTPUT);
+  
   Serial.begin(115200);
   // Initialise wifi connection
   wifiConnected = connectWifi();
@@ -55,11 +44,10 @@ void setup()
   if(wifiConnected){
     
     // Define your devices here. 
-    espalexa.addDevice("Motor 1", firstLightChanged); //simplest definition, default state off
-    espalexa.addDevice("Motor 2", secondLightChanged, 255); //third parameter is beginning state (here fully on)
-    espalexa.addDevice("Motor 4", fourthLightChanged);
-    
-    device3 = new EspalexaDevice("Motor 3", thirdLightChanged); //you can also create the Device objects yourself like here
+    espalexa.addDevice("Filtro", firstLightChanged); //simplest definition, default state off
+    espalexa.addDevice("Circulação", secondLightChanged, 255); //third parameter is beginning state (here fully on)
+    espalexa.addDevice("Borda infinita", thirdLightChanged);
+    device3 = new EspalexaDevice("Jacuzzi", fourthLightChanged); //you can also create the Device objects yourself like here
     espalexa.addDevice(device3); //and then add them
     device3->setValue(128); //this allows you to e.g. update their state value at any time!
 
@@ -68,7 +56,7 @@ void setup()
   } else
   {
     while (1) {
-      Serial.println("Não foi possível conectar no wifi, por favor resetar o esp");
+      Serial.println("Cannot connect to WiFi. Please check data and reset the ESP.");
       delay(2500);
     }
   }
@@ -76,34 +64,34 @@ void setup()
  
 void loop()
 {
-  espalexa.loop();
-
-  int Motor1State, Motor2State;
-   Motor1State = digitalRead(PinMotor1);
-   Motor2State = digitalRead(PinMotor2);
+   espalexa.loop();
+  int MotorState1, MotorState2;
+  MotorState1 == digitalRead(pinMotor1);
+  MotorState2 == digitalRead(pinMotor2);
+   espalexa.loop();
   
-  if (((Motor1State == HIGH) && (Motor2State == LOW)))
+    if (((MotorState1 == HIGH) && (MotorState2 == LOW)))
        
       {
     	
-       digitalWrite(pinMotor1, HIGH);
-    	digitalWrite(pinMotor2, LOW);
+       digitalWrite(MotorState1, HIGH);
+    	digitalWrite(MotorState2, LOW);
     
     	}
  
-  	if (((Motor1State == LOW) && (Motor2State == HIGH)));
+  	if (((MotorState1 == LOW) && (MotorState2 == HIGH)));
         {
     	
-       digitalWrite(pinMotor2, HIGH);
-    	digitalWrite(pinMotor1, LOW);
+       digitalWrite(MotorState2, HIGH);
+    	digitalWrite(MotorState1, LOW);
     
     	}
     
-    if (((Motor1State == HIGH) && (Motor2State == HIGH)));
+    if (((MotorState1 == HIGH) && (MotorState2 == HIGH)));
         {
     	
-       digitalWrite(pinMotor2, LOW);
-    	digitalWrite(pinMotor1, LOW);
+       digitalWrite(MotorState2, LOW);
+    	digitalWrite(MotorState1, LOW);
   	
     
   
@@ -115,14 +103,14 @@ void loop()
 
 //our callback functions
 void firstLightChanged(uint8_t brightness) {
-    Serial.print("Dispositivo Motor 1 ligado ");
+    Serial.print("Device 1 changed to ");
     
     //do what you need to do here
     digitalWrite(pinMotor1, brightness);
 
     //EXAMPLE
     if (brightness) {
-      Serial.print("ON");
+      Serial.print("ON, brightness ");
       Serial.println(brightness);
     }
     else  {
@@ -131,32 +119,32 @@ void firstLightChanged(uint8_t brightness) {
 }
 
 void secondLightChanged(uint8_t brightness) {
-  Serial.print("Dispositivo Motor 2 ligado ");
-
   //do what you need to do here
-  digitalWrite(pinMotor2, brightness);
+  Serial.print("Device 2 changed to ");
+    
+    //do what you need to do here
+    digitalWrite(pinMotor2, brightness);
 
-  //EXAMPLE
+    //EXAMPLE
     if (brightness) {
-      Serial.print("ON");
+      Serial.print("ON, brightness ");
       Serial.println(brightness);
     }
     else  {
       Serial.println("OFF");
     }
-
-
 }
 
 void thirdLightChanged(uint8_t brightness) {
-  Serial.print("Dispositivo Motor 3 ligado ");
-
   //do what you need to do here
-  digitalWrite(pinMotor3, brightness);
+  Serial.print("Device 3 changed to ");
+    
+    //do what you need to do here
+    digitalWrite(pinMotor3, brightness);
 
-  //EXAMPLE
-  if (brightness) {
-      Serial.print("ON");
+    //EXAMPLE
+    if (brightness) {
+      Serial.print("ON, brightness ");
       Serial.println(brightness);
     }
     else  {
@@ -165,14 +153,14 @@ void thirdLightChanged(uint8_t brightness) {
 }
 
 void fourthLightChanged(uint8_t brightness) {
-  Serial.print("Dispositivo Motor 4 ligado ");
+    Serial.print("Device 4 changed to ");
+    
+    //do what you need to do here
+    digitalWrite(pinMotor4, brightness);
 
-  //do what you need to do here
-  digitalWrite(pinMotor4, brightness);
-
-  //EXAMPLE
-  if (brightness) {
-      Serial.print("ON");
+    //EXAMPLE
+    if (brightness) {
+      Serial.print("ON, brightness ");
       Serial.println(brightness);
     }
     else  {
