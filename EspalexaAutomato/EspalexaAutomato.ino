@@ -10,12 +10,17 @@
 #define pinMotor3 5
 #define pinMotor4 18
 
+Espalexa Motorstate1, Motorstate2;
+
+//Variável usada para saber o estado do led.
+int ligarMotor = 0;
+
 // prototypes
 boolean connectWifi();
 
 //callback functions
-void firstLightChanged(uint8_t brightness);
-void secondLightChanged(uint8_t brightness);
+void firstLightChanged(uint8_t val);
+void secondLightChanged(uint8_t val);
 void thirdLightChanged(uint8_t brightness);
 void fourthLightChanged(uint8_t brightness);
 
@@ -36,6 +41,11 @@ void setup()
   pinMode(pinMotor2, OUTPUT);
   pinMode(pinMotor3, OUTPUT);
   pinMode(pinMotor4, OUTPUT);
+
+  digitalWrite(pinMotor1, LOW);
+  digitalWrite(pinMotor2, LOW);
+  
+
   
   Serial.begin(115200);
   // Initialise wifi connection
@@ -65,74 +75,34 @@ void setup()
 void loop()
 {
    espalexa.loop();
-  int MotorState1, MotorState2;
-  MotorState1 == digitalRead(pinMotor1);
-  MotorState2 == digitalRead(pinMotor2);
-   espalexa.loop();
-  
-    if (((MotorState1 == HIGH) && (MotorState2 == LOW)))
-       
-      {
-    	
-       digitalWrite(MotorState1, HIGH);
-    	digitalWrite(MotorState2, LOW);
-    
-    	}
- 
-  	if (((MotorState1 == LOW) && (MotorState2 == HIGH)));
-        {
-    	
-       digitalWrite(MotorState2, HIGH);
-    	digitalWrite(MotorState1, LOW);
-    
-    	}
-    
-    if (((MotorState1 == HIGH) && (MotorState2 == HIGH)));
-        {
-    	
-       digitalWrite(MotorState2, LOW);
-    	digitalWrite(MotorState1, LOW);
-  	
-    
-  
-    
-  
-   }
    delay(1);
 }
 
 //our callback functions
-void firstLightChanged(uint8_t brightness) {
-    Serial.print("Device 1 changed to ");
+void firstLightChanged(uint8_t val) {
     
-    //do what you need to do here
-    digitalWrite(pinMotor1, brightness);
-
-    //EXAMPLE
-    if (brightness) {
-      Serial.print("ON, brightness ");
-      Serial.println(brightness);
+    if (val == 1) {
+      digitalWrite(pinMotor2, LOW);
+      ligarMotor = 1;
+      
     }
     else  {
-      Serial.println("OFF");
+      ligarMotor = 0;
     }
+  digitalWrite(pinMotor1, val)
 }
 
-void secondLightChanged(uint8_t brightness) {
+void secondLightChanged(uint8_t val) {
   //do what you need to do here
-  Serial.print("Device 2 changed to ");
-    
-    //do what you need to do here
-    digitalWrite(pinMotor2, brightness);
-
-    //EXAMPLE
-    if (brightness) {
-      Serial.print("ON, brightness ");
-      Serial.println(brightness);
+   if (val == 1) {
+      digitalWrite(pinMotor1, LOW);
+      ligarMotor = 2;
+      
     }
     else  {
-      Serial.println("OFF");
+      ligarMotor = 0;
     }
+  digitalWrite(pinMotor2, val)
 }
 
 void thirdLightChanged(uint8_t brightness) {
