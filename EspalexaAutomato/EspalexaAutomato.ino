@@ -9,20 +9,27 @@
 #define pinMotor2 4
 #define pinMotor3 5
 #define pinMotor4 18
+#define pinMotor5 19
 
 Espalexa Motorstate1, Motorstate2;
 
-//Variável usada para saber o estado do led.
 int ligarMotor = 0;
+
+//controle dos motores
+uint8_t MotorState1;
+uint8_t MotorState2;
 
 // prototypes
 boolean connectWifi();
+
+
 
 //callback functions
 void firstLightChanged(uint8_t val);
 void secondLightChanged(uint8_t val);
 void thirdLightChanged(uint8_t brightness);
 void fourthLightChanged(uint8_t brightness);
+void fifthLightChanged(uint8_t brightness);
 
 // Change this!!
 const char* ssid = "ATEL_FIBRA_MONTREAL35@SUA";
@@ -41,23 +48,26 @@ void setup()
   pinMode(pinMotor2, OUTPUT);
   pinMode(pinMotor3, OUTPUT);
   pinMode(pinMotor4, OUTPUT);
+  pinMode(pinMotor5, OUTPUT);
 
   digitalWrite(pinMotor1, LOW);
   digitalWrite(pinMotor2, LOW);
-  
 
-  
+
   Serial.begin(115200);
   // Initialise wifi connection
   wifiConnected = connectWifi();
   
+  
+
   if(wifiConnected){
     
     // Define your devices here. 
     espalexa.addDevice("Filtro", firstLightChanged); //simplest definition, default state off
-    espalexa.addDevice("Circulação", secondLightChanged, 255); //third parameter is beginning state (here fully on)
+    espalexa.addDevice("Circulação", secondLightChanged); //third parameter is beginning state (here fully on)
     espalexa.addDevice("Borda infinita", thirdLightChanged);
-    device3 = new EspalexaDevice("Jacuzzi", fourthLightChanged); //you can also create the Device objects yourself like here
+    espalexa.addDevice("Jacuzzi", fourthLightChanged); //you can also create the Device objects yourself like here
+    device3 = new EspalexaDevice("Aquecedor", fifthLightChanged);
     espalexa.addDevice(device3); //and then add them
     device3->setValue(128); //this allows you to e.g. update their state value at any time!
 
@@ -80,30 +90,34 @@ void loop()
 
 //our callback functions
 void firstLightChanged(uint8_t val) {
-    
-    if (val == 1) {
-      digitalWrite(pinMotor2, LOW);
-      ligarMotor = 1;
+  if (val == 0) {
+      digitalWrite(pinMotor1, LOW);
       
     }
     else  {
-      ligarMotor = 0;
+      digitalWrite(pinMotor1, HIGH);
+      digitalWrite(pinMotor2, LOW);
+
     }
-  digitalWrite(pinMotor1, val)
+  
 }
+
+
 
 void secondLightChanged(uint8_t val) {
   //do what you need to do here
-   if (val == 1) {
-      digitalWrite(pinMotor1, LOW);
-      ligarMotor = 2;
+ if (val == 0) {
+      digitalWrite(pinMotor2, LOW);
       
     }
     else  {
-      ligarMotor = 0;
+      digitalWrite(pinMotor2, HIGH);
+      digitalWrite(pinMotor1, LOW);
+
     }
-  digitalWrite(pinMotor2, val)
+  
 }
+
 
 void thirdLightChanged(uint8_t brightness) {
   //do what you need to do here
@@ -137,6 +151,22 @@ void fourthLightChanged(uint8_t brightness) {
       Serial.println("OFF");
     }
 }
+void fifthLightChanged(uint8_t brightness) {
+  Serial.print("Device 5 changed to ");
+    
+    //do what you need to do here
+    digitalWrite(pinMotor5, brightness);
+
+    //EXAMPLE
+    if (brightness) {
+      Serial.print("ON, brightness ");
+      Serial.println(brightness);
+    }
+    else  {
+      Serial.println("OFF");
+    }
+}
+
 
 // connect to wifi – returns true if successful or false if not
 boolean connectWifi(){
