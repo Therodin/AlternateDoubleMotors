@@ -11,7 +11,6 @@
 #define pinMotor4 18
 #define pinMotor5 19
 
-Espalexa Motorstate1, Motorstate2;
 
 // Definição numérica para estado do motor
 int ligarMotor = 0;
@@ -87,7 +86,7 @@ void loop()
 }
 
 //funções de chamada
-void firstLightChanged(uint8_t val) {
+void primeiroMotor(uint8_t val) {
   if (val == 0) {
       digitalWrite(pinMotor1, LOW);
       
@@ -103,7 +102,7 @@ void firstLightChanged(uint8_t val) {
 
 
 
-void secondLightChanged(uint8_t val) {
+void segundoMotor(uint8_t val) {
  if (val == 0) {
       digitalWrite(pinMotor2, LOW);
       
@@ -118,7 +117,7 @@ void secondLightChanged(uint8_t val) {
 }
 
 
-void thirdLightChanged(uint8_t brightness) {
+void terceiroMotor(uint8_t brightness) {
   //do what you need to do here
   Serial.print("Device 3 changed to ");
     
@@ -135,7 +134,7 @@ void thirdLightChanged(uint8_t brightness) {
     }
 }
 
-void fourthLightChanged(uint8_t brightness) {
+void quartoMotor(uint8_t brightness) {
     Serial.print("Device 4 changed to ");
     
     //do what you need to do here
@@ -150,7 +149,7 @@ void fourthLightChanged(uint8_t brightness) {
       Serial.println("OFF");
     }
 }
-void fifthLightChanged(uint8_t brightness) {
+void quintoMotor(uint8_t brightness) {
   Serial.print("Device 5 changed to ");
     
     //do what you need to do here
