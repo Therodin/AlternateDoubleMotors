@@ -13,23 +13,20 @@
 
 Espalexa Motorstate1, Motorstate2;
 
+// Definição numérica para estado do motor
 int ligarMotor = 0;
-
-//controle dos motores
-uint8_t MotorState1;
-uint8_t MotorState2;
 
 // prototypes
 boolean connectWifi();
 
 
 
-//callback functions
-void firstLightChanged(uint8_t val);
-void secondLightChanged(uint8_t val);
-void thirdLightChanged(uint8_t brightness);
-void fourthLightChanged(uint8_t brightness);
-void fifthLightChanged(uint8_t brightness);
+//funções definidas
+void primeiroMotor(uint8_t val);
+void segundoMotor(uint8_t val);
+void terceiroMotor(uint8_t brightness);
+void quartoMotor(uint8_t brightness);
+void quintoMotor(uint8_t brightness);
 
 // Change this!!
 const char* ssid = "ATEL_FIBRA_MONTREAL35@SUA";
@@ -50,6 +47,7 @@ void setup()
   pinMode(pinMotor4, OUTPUT);
   pinMode(pinMotor5, OUTPUT);
 
+  //os dois pinos começam LOW
   digitalWrite(pinMotor1, LOW);
   digitalWrite(pinMotor2, LOW);
 
@@ -62,7 +60,7 @@ void setup()
 
   if(wifiConnected){
     
-    // Define your devices here. 
+    // Definindo os dispositivos. 
     espalexa.addDevice("Filtro", firstLightChanged); //simplest definition, default state off
     espalexa.addDevice("Circulação", secondLightChanged); //third parameter is beginning state (here fully on)
     espalexa.addDevice("Borda infinita", thirdLightChanged);
@@ -88,7 +86,7 @@ void loop()
    delay(1);
 }
 
-//our callback functions
+//funções de chamada
 void firstLightChanged(uint8_t val) {
   if (val == 0) {
       digitalWrite(pinMotor1, LOW);
@@ -100,12 +98,12 @@ void firstLightChanged(uint8_t val) {
 
     }
   
+  delay(2000)
 }
 
 
 
 void secondLightChanged(uint8_t val) {
-  //do what you need to do here
  if (val == 0) {
       digitalWrite(pinMotor2, LOW);
       
@@ -116,6 +114,7 @@ void secondLightChanged(uint8_t val) {
 
     }
   
+  delay(2000)
 }
 
 
