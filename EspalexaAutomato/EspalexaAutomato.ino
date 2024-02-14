@@ -60,11 +60,11 @@ void setup()
   if(wifiConnected){
     
     // Definindo os dispositivos. 
-    espalexa.addDevice("Filtro", firstLightChanged); //simplest definition, default state off
-    espalexa.addDevice("Circulação", secondLightChanged); //third parameter is beginning state (here fully on)
-    espalexa.addDevice("Borda infinita", thirdLightChanged);
-    espalexa.addDevice("Jacuzzi", fourthLightChanged); //you can also create the Device objects yourself like here
-    device3 = new EspalexaDevice("Aquecedor", fifthLightChanged);
+    espalexa.addDevice("Filtro", primeiroMotor); //simplest definition, default state off
+    espalexa.addDevice("Circulação", segundoMotor); //third parameter is beginning state (here fully on)
+    espalexa.addDevice("Borda infinita", terceiroMotor);
+    espalexa.addDevice("Jacuzzi", quartoMotor); //you can also create the Device objects yourself like here
+    device3 = new EspalexaDevice("Aquecedor", quintoMotor);
     espalexa.addDevice(device3); //and then add them
     device3->setValue(128); //this allows you to e.g. update their state value at any time!
 
